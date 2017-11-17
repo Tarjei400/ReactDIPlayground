@@ -1,5 +1,5 @@
 import "reflect-metadata";
-import "./di/injectable";
+import "./di/inversify.kernel";
 
 import * as React from "react";
 import * as ReactDOM from "react-dom";

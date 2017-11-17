@@ -1,5 +1,5 @@
 import * as React from "react";
-import { IUserStore } from "../stores/UserStore";
+import { IUserStore } from "../stores/IUserStore";
 
 interface IHelloWorldProps {
 }
@@ -13,8 +13,7 @@ export class HelloWorld extends React.Component<IHelloWorldProps, IHelloWorldSta
     /***
      * @property userStore
      */
-    @inject()
-    public userStore : IUserStore;
+
 
     public state: IHelloWorldState = {
         counter: 0
@@ -34,7 +33,7 @@ export class HelloWorld extends React.Component<IHelloWorldProps, IHelloWorldSta
                 onClick={() => this.clickHandler()}
                 className="btn btn-primary" type="button"
             >
-                {this.userStore.get('asd')}<span className="badge">{this.state.counter}</span>
+                "TEST" <span className="badge">{this.state.counter}</span>
             </button>
         );
     }

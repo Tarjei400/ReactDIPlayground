@@ -61,7 +61,7 @@ Sparky.task('check-updates', () => {
 });
 
 Sparky.task('type-check', () => {
-    testAsync.runAsync();
+    testAsync.runSync();
 });
 
 Sparky.task('default', ['clean', 'config', 'type-check', 'check-updates', 'tests'], () => {

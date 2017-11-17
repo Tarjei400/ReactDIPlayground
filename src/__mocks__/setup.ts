@@ -7,7 +7,6 @@ import * as Adapter from "enzyme-adapter-react-16";
 import "reflect-metadata"
 import "../di/injectable"
 
-installMocks();
 Enzyme.configure({ adapter: new Adapter() });
 
 window.requestAnimationFrame = function(callback: FrameRequestCallback): number{
