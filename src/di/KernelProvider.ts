@@ -3,13 +3,19 @@ import { IKernelProvider } from "./interfaces/IKernelProvider"
 
 @injectable()
 export class KernelProvider implements IKernelProvider {
-    private kernel : interfaces.Container;
+    static kernelInstance : interfaces.Container;
+    static mocksInstance : interfaces.Container;
 
-    constructor(){
-        this.kernel = new Container();
-        this.kernel.bind<IKernelProvider>(IKernelProvider).to(KernelProvider);
+    constructor() {
+        if(!KernelProvider.kernelInstance) {
+            KernelProvider.kernelInstance = new Container();
+            KernelProvider.mocksInstance = KernelProvider.kernelInstance.createChild();
+        }
     }
-    public get() : interfaces.Container {
-        return this.kernel
+    public get(mock: boolean = false) : interfaces.Container {
+        if (mock){
+            return KernelProvider.mocksInstance
+        }
+        return KernelProvider.kernelInstance
     };
 }

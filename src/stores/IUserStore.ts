@@ -1,9 +1,6 @@
 
 import { injectable } from "inversify";
 
-export interface IUserStore {
+export abstract class IUserStore {
     get(name: String): void
 }
-
-@injectable()
-export abstract class IUserStore implements IUserStore {}

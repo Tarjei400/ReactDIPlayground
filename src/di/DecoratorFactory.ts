@@ -13,29 +13,39 @@ export class ProviderDecoratorFactory implements IParametrizedDecoratorFactory {
     @inject(IKernelProvider)
     private kernelProvider: IKernelProvider;
 
-    public make<T>(type: interfaces.ServiceIdentifier<any> ) : IParametrizedDecorator {
-        let kernel = this.kernelProvider.get();
-        return function() : IDecorator {
-            return <T>(target: Object, name: string, descriptor?: any) : void => {
-                target[name] = kernel.get<T>(type);
-                kernel.bind<T>()
+    /***
+     * Creates provider decorator, if mocked flag is true, dependencies will be binded to kernel with mocks
+     *
+     * @param mocked
+     * @returns {(type:interfaces.ServiceIdentifier<any>)=>IParametrizedDecorator}
+     */
+    public make<T>(mocked : boolean = false): IParametrizedDecorator {
+        let kernel = this.kernelProvider.get(mocked);
+        return function(type: interfaces.ServiceIdentifier<any>) : IParametrizedDecorator {
+            return <T>(target: any, name: string, descriptor?: any) : void => {
+                injectable()(target, name,descriptor);
+                kernel.bind<T>(type).to(target);
             }
         }
     }
 }
 
 @injectable()
-export class InjectorDecoratorFactory implements IDecoratorFactory {
+export class InjectorDecoratorFactory implements IParametrizedDecoratorFactory {
 
     static TAG = "Injector";
 
     @inject(IKernelProvider)
     private kernelProvider: IKernelProvider;
 
-    public make() : IDecorator {
-        return (target: Object, name: string, descriptor?: any) : void => {
-            let type: interfaces.ServiceIdentifier<any> = Reflect.getMetadata(TYPE_TAG, target, name);
-            target[name] = kernel.get<T>(type);
+    public make(mocked : boolean =false) : IParametrizedDecorator {
+        let kernel = this.kernelProvider.get(mocked);
+
+        return function(): IDecorator {
+            return (target: any, name: string, descriptor?: any) : void => {
+                let type: interfaces.ServiceIdentifier<any> = Reflect.getMetadata(TYPE_TAG, target, name);
+                target[name] = kernel.get(type);
+            }
         }
     }
 }

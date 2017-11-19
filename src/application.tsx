@@ -1,5 +1,6 @@
 import "reflect-metadata";
 import "./di/inversify.kernel";
+import "./imports";
 
 import * as React from "react";
 import * as ReactDOM from "react-dom";

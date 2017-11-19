@@ -1,6 +1,7 @@
-import { IDecorator } from "./IDecorator";
+import { IParametrizedDecorator } from "./IDecorator";
 
 export interface IInjectionDecotrators {
-    inject: IDecorator,
-    provide: IDecorator
+    resolve: IParametrizedDecorator,
+    provide: IParametrizedDecorator
+    provideMock: IParametrizedDecorator
 }

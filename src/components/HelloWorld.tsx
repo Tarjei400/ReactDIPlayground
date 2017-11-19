@@ -13,11 +13,8 @@ export class HelloWorld extends React.Component<IHelloWorldProps, IHelloWorldSta
     /***
      * @property userStore
      */
-
-
-    public state: IHelloWorldState = {
-        counter: 0
-    };
+    @resolve()
+    private userStore : IUserStore;
 
     constructor(props) {
         super(props);
@@ -33,7 +30,7 @@ export class HelloWorld extends React.Component<IHelloWorldProps, IHelloWorldSta
                 onClick={() => this.clickHandler()}
                 className="btn btn-primary" type="button"
             >
-                "TEST" <span className="badge">{this.state.counter}</span>
+                {this.userStore.get()}<span className="badge">{this.state.counter}</span>
             </button>
         );
     }
