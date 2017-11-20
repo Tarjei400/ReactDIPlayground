@@ -6,6 +6,11 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { HelloWorld } from "./components/HelloWorld";
 import "./styles/main.scss";
+import "./reducers/imports";
+import "./config/imports";
+
+import { KernelProvider } from "./di/KernelProvider";
+import {IStoreFactory} from "./reducers/interfaces/IStoreFactory";
 
 declare global {
     namespace HelloSomeNameSpace {
@@ -16,6 +21,9 @@ declare global {
         }
     }
 }
+
+let kernel = KernelProvider.kernelInstance;
+let store = kernel.get<IStoreFactory>().make();
 
 /**
  * Render application into a div
