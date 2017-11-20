@@ -6,6 +6,9 @@ import * as ReactDOM from "react-dom";
 import { HelloWorld } from "./components/HelloWorld";
 import "./styles/main.scss";
 
+import { KernelProvider } from "./di/KernelProvider";
+import {IStoreFactory} from "./reducers/interfaces/IStoreFactory";
+
 declare global {
     namespace HelloSomeNameSpace {
         interface IError {
@@ -15,6 +18,9 @@ declare global {
         }
     }
 }
+
+let kernel = KernelProvider.get();
+let store = kernel.get<IStoreFactory>().make();
 
 /**
  * Render application into a div
