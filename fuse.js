@@ -27,11 +27,12 @@ let fuse, app, vendor, isProduction;
 
 Sparky.task('config', () => {
   fuse = FuseBox.init({
+
     homeDir: 'src',
     output: 'dist/$name.js',
     tsConfig: 'tsconfig.json',
     useJsNext: ['react', 'react-dom'],
-    polyfillNonStandardDefaultUsage: ['react', 'react-dom'],
+    polyfillNonStandardDefaultUsage: ['react', 'react-dom', 'propt-types'],
     sourceMaps: !isProduction,
     target: 'browser',
     plugins: [
@@ -75,7 +76,11 @@ Sparky.task('default', ['clean', 'config', 'type-check', 'check-updates', 'tests
 });
 
 Sparky.task('tests', () => {
-  runCLI({}, ['src']);
+  runCLI({
+    'globals': {
+      'MOCK_INJECTOR' : true
+    }
+  }, ['src']);
 });
 
 Sparky.task('clean', () => Sparky.src('dist/').clean('dist/'));

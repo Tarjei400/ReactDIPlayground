@@ -1,4 +1,4 @@
-import { interfaces, Container, injectable } from "inversify";
+import { interfaces, Container, injectable, inject } from "inversify";
 import { IKernelProvider } from "./interfaces/IKernelProvider"
 
 @injectable()

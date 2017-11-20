@@ -2,6 +2,7 @@ import { interfaces, inject, injectable } from "inversify"
 import { IKernelProvider } from "./interfaces/IKernelProvider";
 import { IDecoratorFactory, IParametrizedDecoratorFactory } from "./interfaces/IDecoratorFactory";
 import { IDecorator, IParametrizedDecorator } from "./interfaces/IDecorator";
+import { IDIConfig } from "./interfaces/IDIConfig";
 
 const TYPE_TAG = "design:type";
 
@@ -38,7 +39,7 @@ export class InjectorDecoratorFactory implements IParametrizedDecoratorFactory {
     @inject(IKernelProvider)
     private kernelProvider: IKernelProvider;
 
-    public make(mocked : boolean =false) : IParametrizedDecorator {
+    public make(mocked : boolean = false) : IParametrizedDecorator {
         let kernel = this.kernelProvider.get(mocked);
 
         return function(): IDecorator {

@@ -6,6 +6,16 @@ import { DecoratorsInitializer } from "./DecoratorsInitializer"
 import { IDecoratorsInitializer } from "./interfaces/IDecoratorsInitializer"
 import { IKernelProvider } from "./interfaces/IKernelProvider"
 import { IParametrizedDecorator } from "./interfaces/IDecorator";
+import { IDIConfig } from "./interfaces/IDIConfig";
+import { DIConfig, TestsDIConfig } from "./DIConfig";
+
+function shouldMock(): boolean{
+    try{
+        return !!MOCK_INJECTOR
+    } catch (e){
+        return false;
+    }
+}
 
 let kernel : interfaces.Container = (new KernelProvider()).get();
 
@@ -19,6 +29,13 @@ kernel.bind<IDecoratorFactory>(IParametrizedDecoratorFactory)
     .whenTargetNamed(InjectorDecoratorFactory.TAG);
 
 kernel.bind<IDecoratorsInitializer>(IDecoratorsInitializer).to(DecoratorsInitializer);
+
+if (shouldMock()){
+    kernel.bind<IDIConfig>(IDIConfig).to(DIConfig);
+} else {
+    kernel.bind<IDIConfig>(IDIConfig).to(TestsDIConfig);
+}
+
 
 let decoratorsInitializer = kernel.get(IDecoratorsInitializer);
 
