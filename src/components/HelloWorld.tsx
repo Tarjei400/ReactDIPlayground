@@ -14,7 +14,6 @@ export class HelloWorld extends React.Component<IHelloWorldProps, IHelloWorldSta
      * @property userStore
      */
 
-
     public state: IHelloWorldState = {
         counter: 0
     };

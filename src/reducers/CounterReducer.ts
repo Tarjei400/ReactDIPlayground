@@ -1,9 +1,33 @@
-import { ICounterReducer } from "./interfaces/ICounterReducer";
+import { IReducer } from "./interfaces/IReducer";
+import { ACTIONS } from "./actions"
 
-@provide(ICounterReducer)
-export class CounterReducer implements ICounterReducer {
+const STATE_NODE = "counter";
 
+@provide(IReducer)
+export class CounterReducer implements IReducer {
+
+    /***
+     * Name of a property in state object.
+     * @type {string} stateNode
+     */
+    public get stateNode() : string {
+        return STATE_NODE;
+    }
+
+    /**
+     * Counter reducer
+     *
+     * @param state
+     * @param action
+     * @returns {any}
+     */
     public reduce(state, action){
-        return state;
+        switch (action.type) {
+            case ACTIONS.INCREMENT:
+                return {...state, counter: state.counter + 1};
+
+            default:
+                return state
+        }
     }
 }
