@@ -1,13 +1,20 @@
 import { interfaces } from "inversify";
 import { KernelProvider } from "./KernelProvider"
-import { IDecoratorFactory, IParametrizedDecoratorFactory } from "./interfaces/IDecoratorFactory";
-import { InjectorDecoratorFactory, ProviderDecoratorFactory } from "./DecoratorFactory";
+import { IDIDecoratorFactory } from "./interfaces/IDIDecoratorFactory";
+import { DIDecoratorFactory } from "./DIDecoratorFactory";
 import { DecoratorsInitializer } from "./DecoratorsInitializer"
 import { IDecoratorsInitializer } from "./interfaces/IDecoratorsInitializer"
 import { IKernelProvider } from "./interfaces/IKernelProvider"
-import { IParametrizedDecorator } from "./interfaces/IDecorator";
 import { IDIConfig } from "./interfaces/IDIConfig";
 import { DIConfig, TestsDIConfig } from "./DIConfig";
+import { IDecoratorCreator } from "./interfaces/IDecoratorCreator";
+import { InjectConfigCreator} from "./creators/InejectConfig";
+import { InjectCreator} from "./creators/Inject";
+import { ProvideCreator} from "./creators/Provide";
+import { ProvideConfigCreator} from "./creators/ProvideConfig";
+import { ProvideMockCreator} from "./creators/ProvideMock";
+import { ResolveCreator} from "./creators/Resolve";
+import { ResolveConfigCreator} from "./creators/ResolveConfig";
 
 function shouldMock(): boolean{
     try{
@@ -20,13 +27,8 @@ function shouldMock(): boolean{
 let kernel : interfaces.Container = (new KernelProvider()).get();
 
 kernel.bind<IKernelProvider>(IKernelProvider).to(KernelProvider);
-kernel.bind<IDecoratorFactory>(IParametrizedDecoratorFactory)
-    .to(ProviderDecoratorFactory)
-    .whenTargetNamed(ProviderDecoratorFactory.TAG);
-
-kernel.bind<IDecoratorFactory>(IParametrizedDecoratorFactory)
-    .to(InjectorDecoratorFactory)
-    .whenTargetNamed(InjectorDecoratorFactory.TAG);
+kernel.bind<IDIDecoratorFactory>(IDIDecoratorFactory)
+    .to(DIDecoratorFactory);
 
 kernel.bind<IDecoratorsInitializer>(IDecoratorsInitializer).to(DecoratorsInitializer);
 
@@ -36,18 +38,18 @@ if (shouldMock()){
     kernel.bind<IDIConfig>(IDIConfig).to(TestsDIConfig);
 }
 
+kernel.bind<IDecoratorCreator>(IDecoratorCreator).to(InjectConfigCreator);
+kernel.bind<IDecoratorCreator>(IDecoratorCreator).to(InjectCreator);
+
+kernel.bind<IDecoratorCreator>(IDecoratorCreator).to(ProvideCreator);
+kernel.bind<IDecoratorCreator>(IDecoratorCreator).to(ProvideMockCreator);
+kernel.bind<IDecoratorCreator>(IDecoratorCreator).to(ProvideConfigCreator);
+
+kernel.bind<IDecoratorCreator>(IDecoratorCreator).to(ResolveCreator);
+kernel.bind<IDecoratorCreator>(IDecoratorCreator).to(ResolveConfigCreator);
 
 let decoratorsInitializer = kernel.get(IDecoratorsInitializer);
 
-let { resolve, provide, provideMock } = decoratorsInitializer.initialize();
-
-interface Window {
-    resolve : IParametrizedDecorator
-    provide : IParametrizedDecorator
-    provideMock : IParametrizedDecorator
-}
-
-window.resolve = resolve;
-window.provide = provide;
-window.provideMock = provideMock;
+let decorators = decoratorsInitializer.initialize();
+window = Object.assign(window, decorators);
 

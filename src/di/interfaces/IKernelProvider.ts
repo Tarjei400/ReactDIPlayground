@@ -1,5 +1,5 @@
 import { interfaces } from "inversify";
 
 export abstract class IKernelProvider {
-    abstract get() : interfaces.Container;
+    abstract get(mock: boolean ) : interfaces.Container;
 }

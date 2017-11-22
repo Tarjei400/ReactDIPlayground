@@ -1,0 +1,28 @@
+import { inject } from "inversify";
+import { BaseDecoratorCreator} from "./BaseDecoratorCreator";
+
+/***
+ * Creator for `@inject` decorator
+ *
+ * @class InjectConfigCreator
+ */
+export class InjectCreator extends BaseDecoratorCreator {
+    /***
+     * @inherit
+     */
+
+    public name() { return "inject"}
+    /**
+     * @inherit
+     */
+    public get config() {
+        return {
+            mocked: this.diConfig.mockedKernel,
+            reflectType: true
+        };
+    }
+
+    public decorator({type, target, name, descriptor}){
+        inject(type)(target, name, descriptor);
+    }
+}
